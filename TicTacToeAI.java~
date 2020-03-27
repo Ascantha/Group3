@@ -9,34 +9,29 @@ public class TicTacToeAI
     //Fill it with the right values
     for(int i = 0; i < 9; i++){if(inBoard[i%3][i/3] != ' '){board[i] = inBoard[i%3][i/3];}}
     //Run the minimax algorithm
-    return minimax(board, player).place;
+    return minimax(board, player);
   }
   
-  private minimaxPlaceScore minimax(char[] board, char player){
+  private int minimax(char[] board, char player){
     //Find available places
     int[] avail = findSpots(board);
     //Check to see if we've won
     if(winning(board, 'X')){
-      return new minimaxPlaceScore(-1,10);
+      return 10;
     }
     if(winning(board, 'O')){
-      return new minimaxPlaceScore(-1,-10);
+      return -10;
     }
     if(avail.length == 0){
-      return new minimaxPlaceScore(-1,0);
+      return 0;
     }
     
-    minimaxPlaceScore[] moveScores = new minimaxPlaceScore[avail.length];
+    int[] moveScores = new int[avail.length];
     
-    minimaxPlaceScore bestMove = new minimaxPlaceScore(-1,-100);
     for(int i = 0; i < avail.length; i++){
-      char[] b = board.clone();
-      b[avail[i]] = player;
-      moveScores[i] = minimax(b, player);
-      if(moveScores[i].score > bestMove.score) bestMove = moveScores[i];
+      
     }
     
-    return bestMove;
     
   }
   
@@ -66,11 +61,6 @@ public class TicTacToeAI
         return false;
     }
   }
-  
-  private class minimaxPlaceScore{
-    public int space;
-    public int score;
-    public minimaxPlaceScore(int sp, int sc){space = sp; score = sc;}
 }
 
 
