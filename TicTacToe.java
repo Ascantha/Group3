@@ -1,176 +1,124 @@
- import javafx.application.Application;
- import javafx.stage.Stage; 
- import javafx.event.ActionEvent;
- import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color; 
- import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
-import javafx.scene.shape.Ellipse; 
+package ticTacToe;
 
-public class TicTacToe extends Application {
+public class TicTacToe {
 
-	Scene gridscene;
-	public static int wins = 0;
-	private char whoseTurn = 'X';
-			 // Create and initialize cell 
-	private Cell[][] cell = new Cell[3][3];
-			 // Create and initialize a status label
-	private Label lblStatus = new Label("X's turn to play");	
+	private char[][] board;
+    private char currentPlayerMark;	
+    
+public TicTacToe() {//the constructor. It will be responsible for ensuring the board gets initialized properly, and for setting who the first player will be.
 
-	@Override // Override the start method in the Application class 
-	public void start(Stage primaryStage) { 
-
-	
-	
-//creating menu 
-	
-	ToggleGroup tgroup = new ToggleGroup();
-	 
-	Label title = new Label("Tic-Tac-Toe");
-	title.setFont(Font.font("Cambria",32));
-	
-	//vs computer or person
-	Label opponentlbl = new Label("Select Your Opponent");
-	
-	ToggleButton computerbtn = new ToggleButton("Computer ");
-	computerbtn.setToggleGroup(tgroup);
-	computerbtn.setSelected(true);
-	computerbtn.setMinWidth(80);
-	
-	ToggleButton userbtn = new ToggleButton("User");
-	userbtn.setToggleGroup(tgroup);
-	userbtn.setMinWidth(80);
-	
-	HBox opponent = new HBox(20);
-	opponent.getChildren().add(computerbtn);
-	opponent.getChildren().add(userbtn);
-	opponent.setAlignment(Pos.TOP_CENTER);
-
-	
-	VBox opp_vbox = new VBox(15);
-	opp_vbox.getChildren().addAll(opponentlbl, opponent);
-	opp_vbox.setAlignment(Pos.CENTER);
-	
-
-	//wins required
-	Label wins_lbl = new Label("Amount of Wins Required: ");
-	TextField wins_tf = new TextField();
-	wins_tf.setPrefWidth(60);
-	
-	HBox wins_hbox = new HBox(10);
-	wins_hbox.getChildren().addAll(wins_lbl,wins_tf);
-	wins_hbox.setAlignment(Pos.CENTER);
-	
-
-    Alert a = new Alert(AlertType.WARNING); 
-    a.setContentText("Must Specify Amount of Wins Required");
-
-
-	//start button
-	   Button startbtn = new Button("Start");
-	   startbtn.setMaxHeight(200);
-	   startbtn.setMaxWidth(300);
-	   	
-	   startbtn.setOnAction(new EventHandler<ActionEvent>() {
-
-		        @Override
-		        public void handle(ActionEvent event) {
-		            if (wins_tf.getText().isEmpty()) {
-		        			a.show();
-		        }
-		        else {
-		        		wins = Integer.parseInt(wins_tf.getText());
-		        		//grid = true;
-		        		//System.out.println(wins);
-		        		grid(wins, primaryStage);
-		        }
-		        }
-	        
-	    });
-	    
-	 VBox vbox = new VBox(40);
-	 vbox.getChildren().addAll(title,opp_vbox,wins_hbox,startbtn);
-	 vbox.setAlignment(Pos.CENTER);
-	 
-	    
-	Scene menuscene = new Scene(vbox, 500, 500);
-
-	primaryStage.setTitle("TicTacToe");
-	primaryStage.setScene(menuscene);
-	primaryStage.show();
-
+    board = new char[3][3];
+    currentPlayerMark = 'x';
+    initializeBoard();
 }
-	
-	//function for printing out grid 
-	public void grid(int wins, Stage primaryStage) {
-		
-	    int Xscore = 1;
-		int Oscore = 0;
-		
-		Label lblScore = new Label("Best of "+wins);
-		Label lblXvO = new Label("X vs O");
-		
-		Label lblX = new Label(""+Xscore);
-		Label lblO = new Label(""+Oscore);
-		
-		lblScore.setFont(Font.font("Cambria",20));
-		lblXvO.setFont(Font.font("Cambria",20));
-		lblX.setFont(Font.font("Cambria",20));
-		lblO.setFont(Font.font("Cambria",20));
 
-		
-		HBox hboxXO = new HBox(25);
-		hboxXO.getChildren().addAll(lblX,lblO);
-		hboxXO.setAlignment(Pos.CENTER);
-		
-		VBox vboxScore = new VBox();
-		vboxScore.getChildren().addAll(lblScore,lblXvO,hboxXO);
-		vboxScore.setAlignment(Pos.CENTER);
-		
-		 // Pane to hold cell hold nine cells 
-		GridPane pane = new GridPane();
-		 for (int i = 0; i < 3; i++) 
-			for (int j = 0; j < 3; j++)
-				pane.add(cell[i][j] = new Cell(),j,i);
+//Gives us access to currentPlayerMark
+public char getCurrentPlayerMark()
+{
+    return currentPlayerMark;
+}
 
-	  
-		BorderPane borderPane = new BorderPane();
-		borderPane.setCenter(pane);
-		borderPane.setBottom(lblStatus);
-		borderPane.setTop(vboxScore);
+public void initializeBoard() {//This method will initialize the board variable such that all slots are empty.
+	
+	//loop through rows
+for (int i=0; i<3; i++) {
+	
+	//loop through columns
+for (int j=0; j<3; j++) {
+	board[i][j]= '-';
+}
+}
+}
 
-		 gridscene = new Scene(borderPane, 400, 400);
-		primaryStage.setScene(gridscene);
-
-	    
-	    
-		
-	}
+public void printBoard() {//This method will print the Tic-Tac-Toe board to standard output.
+	System.out.println("-------------");
 	
-	
-public class Cell extends Pane {
-	
-	private char token = ' ';
-	
-	public Cell() {
-		setStyle("-fx-border-color:black");
-		this.setPrefSize(500, 800);
-		//this.setOnMouseClicked(e->handleMouseClick());
-	}
-	public char getToken() {
-		return token;
+	for (int i=0; i<3; i++) {
+		System.out.println("| ");
+		for (int j=0; j<3; j++) {
+			System.out.print(board[i][j] + " |  ");
+		}
+		System.out.println();
+		System.out.println("-------------");
 	}
 }
-public static void main(String[] args) {
-	Application.launch(args);
+
+public boolean isBoardFull() {//this method will check whether or not the board is full. It will return true if the board is full and a false otherwise.
+	boolean isFull = true;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[i][j] == '-') {
+                isFull = false;
+            }
+        }
+    }
+
+    return isFull;
 }
 
+public boolean checkForWin() {//This method will check to see if a player has won, and if so, it will return true.
+
+	
+return checkRowsForWin() || checkColumnsForWin() || checkDiagonalsForWin();
+
 }
+private boolean checkRowsForWin() {//This method will specifically check the rows for a win.
+    
+	for (int i=0; i<3; i++) {
+		if (checkRowCol(board[i][0], board[i][1], board[i][2]) == true) {
+			return true;
+	}
+	}
+	return false;
+
+}
+private boolean checkColumnsForWin() { //This method will specifically check the columns for a win.
+	for (int i=0; i<3; i++) {
+		if (checkRowCol(board[0][i], board[1][i], board[2][i]) == true) {
+			return true;
+	}
+	}
+	return false;
+
+}
+
+private boolean checkDiagonalsForWin() { //This method will specifically check the diagonals for a win.
+
+	 return ((checkRowCol(board[0][0], board[1][1], board[2][2]) == true) || (checkRowCol(board[0][2], board[1][1], board[2][0]) == true));
+}
+	
+
+private boolean checkRowCol(char ch1, char ch2, char ch3) { //This method will check the characters taken in to see if all three are the same ‘x’ or ‘o’ letter. If so, return true.
+	 return ((ch1 != '-') && (ch1 == ch2) && (ch2 == ch3));
+}
+
+
+public void changePlayer() { // Change player marks back and forth.
+    if (currentPlayerMark == 'x') {
+        currentPlayerMark = 'o';
+    }
+    else {
+        currentPlayerMark = 'x';
+    }
+}
+
+
+public boolean placeMark(int row, int col) { // Places a mark at the cell specified by row and col with the mark of the current player.
+
+    
+    if ((row >= 0) && (row < 3)) { // Make sure that row and column are in bounds of the board.
+        if ((col >= 0) && (col < 3)) {
+            if (board[row][col] == '-') {
+                board[row][col] = currentPlayerMark;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+}
+
+
+
