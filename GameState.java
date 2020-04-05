@@ -7,7 +7,7 @@ public class GameState {
 
 	public int placePiece(int row, int col){
 		if (gameBoard[row][col] != '-'){
-			return -1;
+			return -2;
 		}
 		if (turn == 0){
 			gameBoard[row][col] = 'X';
@@ -18,11 +18,7 @@ public class GameState {
 		}
 		sqFilled++;
 		winner = checkWinner();
-		if (winner != -1){
-			return -1;
-		} else {
-			return winner;
-		}
+		return winner;
 	}
 	
 	public char[][] getBoard() {
