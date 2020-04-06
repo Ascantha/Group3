@@ -1,53 +1,67 @@
-public class TicTacToeAI
- final int X_WIN = 10;
- final int O_WIN = -10;
- final int TIE = 0;
- //Given a board state and player to select for, choose a space.
-  public static int selectSpace(char[][] inBoard, char player){
-    //Construct a nice board for minimax stuffs
-    char[] board = ['0', '1', '2', '3', '4', '5', '6', '7', '8'];
-    //Fill it with the right values
-    for(int i = 0; i < 9; i++){if(inBoard[i%3][i/3] != ' '){board[i] = inBoard[i%3][i/3];}}
-    //Run the minimax algorithm
-    return minimax(board, player).place;
+import java.util.ArrayList;
+
+public class TicTacToeAI{
+ GameState state;
+ char opPlayer;
+ char enPlayer;
+ final Move nullWin = new Move(-1,10);
+ final Move nullLose = new Move(-1,-10);
+ final Move nullTie = new Move(-1,0);
+
+ public TicTacToeAI(boolean isX, GameState s){
+   if(isX){opPlayer = 'X'; enPlayer = 'O';}
+   else{opPlayer = 'O'; enPlayer = 'X';}
+   state = s;
+ }
+   
+  public int selectSpace(){
+    char[] board = new char[9];
+    for(int i = 0; i < 3; i++){
+      for(int j = 0; j < 3; j++){
+        board[i*3+j] = state.getBoard()[i][j];
+      }
+    }
+    Move bestMove = minimax(board, opPlayer);
+    return state.placePiece(bestMove.space % 3, bestMove.space / 3);
   }
   
-  private minimaxPlaceScore minimax(char[] board, char player){
-    //Find available places
-    int[] avail = findSpots(board);
-    //Check to see if we've won
-    if(winning(board, 'X')){
-      return new minimaxPlaceScore(-1,10);
-    }
-    if(winning(board, 'O')){
-      return new minimaxPlaceScore(-1,-10);
-    }
-    if(avail.length == 0){
-      return new minimaxPlaceScore(-1,0);
+  private Move minimax(char[] board, char player){
+    if(winning(board, opPlayer)){return nullWin;}
+    else if(winning(board, enPlayer)){return nullLose;}
+    ArrayList<Integer> avail = findSpots(board);
+    if(avail.size() == 0){return nullTie;}
+    
+    char oplayer = 'O';
+    if(player == oplayer){oplayer = 'X';}
+    
+    ArrayList<Move> moves = new ArrayList<Move>();
+    
+    for(int i = 0; i < avail.size(); i++){
+      board[avail.get(i)] = player;
+      Move newMove = minimax(board, player);
+      newMove.space = avail.get(i);
+      moves.add(newMove);
+      board[avail.get(i)] = '-';
     }
     
-    minimaxPlaceScore[] moveScores = new minimaxPlaceScore[avail.length];
-    
-    minimaxPlaceScore bestMove = new minimaxPlaceScore(-1,-100);
-    for(int i = 0; i < avail.length; i++){
-      char[] b = board.clone();
-      b[avail[i]] = player;
-      moveScores[i] = minimax(b, player);
-      if(moveScores[i].score > bestMove.score) bestMove = moveScores[i];
+    Move bestMove = new Move(-1,0);
+    if(player == opPlayer){//max
+      for(int i = 0; i < moves.size(); i++){
+        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
+      }
     }
-    
+    else{//min
+      for(int i = 0; i < moves.size(); i++){
+        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
+      }
+    }
     return bestMove;
-    
   }
   
-  //return free spots on the board
-  private int[] findSpots(char[] board){
-    int c = 0;
-    for(int i = 0; i < 9; i++){if((board[i] == 'X')||(board[i] == 'O'))c++;}
-    int[] spots = new int[c];
-    int j = 0;
-    for(int i = 0; i < 9; i++){if((board[i] == 'X')||(board[i] == 'O')){spots[j] = i; j++;}}
-    return spots;
+  private ArrayList<Integer> findSpots(char[] board){
+    ArrayList<Integer> spaces = new ArrayList<Integer>();
+    for(int i = 0; i < board.length; i++){if(!(board[i] == 'X' || board[i] == 'O'))spaces.add(i);}
+    return spaces;
   }
   
   private boolean winning(char[] board, char player){
@@ -67,10 +81,12 @@ public class TicTacToeAI
     }
   }
   
-  private class minimaxPlaceScore{
+  private class Move{
     public int space;
     public int score;
-    public minimaxPlaceScore(int sp, int sc){space = sp; score = sc;}
+    public Move(int sp, int sc){score = sc; space = sp;}
+  }
+  
 }
-
+// :)
 
