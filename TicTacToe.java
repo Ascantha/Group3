@@ -22,6 +22,7 @@ public class TicTacToe extends Application {
 	public static int winsCount = 0;
 	public static int XwinsCount = 0;
 	public static int OwinsCount = 0;
+	public static String oppchoice = "";
 
 	public int sqFilled;
 	private char whoseTurn = 'X';
@@ -54,13 +55,16 @@ public class TicTacToe extends Application {
 	Label opponentlbl = new Label("Select Your Opponent");
 	
 	ToggleButton computerbtn = new ToggleButton("Computer ");
+	computerbtn.setUserData("Computer");
 	computerbtn.setToggleGroup(tgroup);
-	computerbtn.setSelected(true);
 	computerbtn.setMinWidth(80);
 	
 	ToggleButton userbtn = new ToggleButton("User");
+	userbtn.setUserData("User");
 	userbtn.setToggleGroup(tgroup);
 	userbtn.setMinWidth(80);
+	userbtn.setSelected(true);
+
 	
 	HBox opponent = new HBox(20);
 	opponent.getChildren().add(computerbtn);
@@ -100,8 +104,12 @@ public class TicTacToe extends Application {
 		        			a.show();
 		        }
 		        else {
+		        	
 		        		winsNeeded = Integer.parseInt(wins_tf.getText());
 		        		grid(winsNeeded, primaryStage);
+		        		oppchoice = tgroup.getSelectedToggle().getUserData().toString();
+		        		System.out.print(oppchoice);
+		        		
 		        }
 		        }
 	        
@@ -251,8 +259,14 @@ public class Cell extends Pane {
 	}
 	
 	private void handleMouseClick() {
-		// If cell is empty and game is not over 
-		//System.out.println("wins currently: "+winsCount + " Wins Needed: "+winsNeeded+" token:"+token+" turn: "+whoseTurn);
+		if (oppchoice == "Computer") {
+			//Nathan's AI 
+			//
+			//
+		}
+		
+		
+		if (oppchoice == "User") {
 		if (token == ' ' && whoseTurn != ' ') {
 
 			setToken(whoseTurn); // Set token in the cell
@@ -275,14 +289,15 @@ public class Cell extends Pane {
 		
 		
 		else if (isFull()) {
-			lblStatus.setText("Draw! The game is over");
-			whoseTurn = ' '; // Game is over 
+			lblStatus.setText("Draw! Redo");
+			resetBoard(); 
 		}
 		else {
 		// Change the turn
 			whoseTurn = (whoseTurn == 'X') ? 'O' : 'X'; // Display whose turn 
 			lblStatus.setText(whoseTurn + "'s turn");
-		} 
+			} 
+		}
 		}
 	}
 	
