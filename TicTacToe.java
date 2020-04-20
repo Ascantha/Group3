@@ -1,3 +1,4 @@
+
 import javafx.application.Application;
  import javafx.stage.Stage;
  import javafx.event.ActionEvent;
@@ -23,6 +24,10 @@ import javafx.application.Application;
   public static int XwinsCount = 0;
   public static int OwinsCount = 0;
   public static String oppchoice = "";
+  public static String diffchoice = "";
+  ToggleButton easybtn = new ToggleButton("Easy");
+  ToggleButton hardbtn = new ToggleButton("Hard");
+
 
   public int sqFilled;
   private char whoseTurn = 'X';
@@ -52,25 +57,59 @@ import javafx.application.Application;
    title.setFont(Font.font("Cambria", 32));
 
    //vs computer or person
-   Label opponentlbl = new Label("Select Your Opponent");
+   Label opponentlbl = new Label("Select Opponent");
 
    ToggleButton computerbtn = new ToggleButton("Computer ");
    computerbtn.setUserData("Computer");
    computerbtn.setToggleGroup(tgroup);
+   computerbtn.setSelected(true);
    computerbtn.setMinWidth(80);
+   computerbtn.setOnAction(e->{
+	   easybtn.setDisable(false);
+	   hardbtn.setDisable(false);
+   });
+
 
    ToggleButton userbtn = new ToggleButton("User");
    userbtn.setUserData("User");
    userbtn.setToggleGroup(tgroup);
    userbtn.setMinWidth(80);
-   userbtn.setSelected(true);
+   userbtn.setOnAction(e->{
+	   easybtn.setDisable(true);
+	   hardbtn.setDisable(true);
+   });
 
 
    HBox opponent = new HBox(20);
    opponent.getChildren().add(computerbtn);
    opponent.getChildren().add(userbtn);
    opponent.setAlignment(Pos.TOP_CENTER);
+   
+   
+   Label lblDiff = new Label("Select Difficulty:");
+   
+   ToggleGroup tdifgroup = new ToggleGroup();
 
+   easybtn.setUserData("Easy");
+   easybtn.setToggleGroup(tdifgroup);
+   easybtn.setMinWidth(80);
+   easybtn.setSelected(true);
+   
+   hardbtn.setUserData("Hard");
+   hardbtn.setToggleGroup(tdifgroup);
+   hardbtn.setMinWidth(80);
+   
+   
+   
+   HBox diffbuttons = new HBox(20);
+   diffbuttons.getChildren().add(easybtn);
+   diffbuttons.getChildren().add(hardbtn);
+   diffbuttons.setAlignment(Pos.TOP_CENTER);
+   
+   VBox difficulty_vbox = new VBox(20);
+   difficulty_vbox.getChildren().addAll(lblDiff,diffbuttons);
+   difficulty_vbox.setAlignment(Pos.CENTER);
+   
 
    VBox opp_vbox = new VBox(15);
    opp_vbox.getChildren().addAll(opponentlbl, opponent);
@@ -107,7 +146,7 @@ import javafx.application.Application;
       winsNeeded = Integer.parseInt(wins_tf.getText());
       grid(winsNeeded, primaryStage);
       oppchoice = tgroup.getSelectedToggle().getUserData().toString();
-      System.out.print(oppchoice);
+      diffchoice = tdifgroup.getSelectedToggle().getUserData().toString();
 
      }
     }
@@ -115,7 +154,7 @@ import javafx.application.Application;
    });
 
    VBox vbox = new VBox(40);
-   vbox.getChildren().addAll(title, opp_vbox, wins_hbox, startbtn);
+   vbox.getChildren().addAll(title, opp_vbox, difficulty_vbox,wins_hbox, startbtn);
    vbox.setAlignment(Pos.CENTER);
 
 
