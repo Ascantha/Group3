@@ -50,7 +50,7 @@ public class TicTacToeAI{
     }
     else{//min
       for(int i = 0; i < moves.size(); i++){
-        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
+        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
       }
     }
     return bestMove;
