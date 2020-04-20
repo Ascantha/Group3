@@ -48,6 +48,10 @@ public class TicTacToeAI{
       board[avail.get(i)] = ' ';
     }
     
+	for(int i = 0; i < moves.size(); i++){
+		system.out.println("Space " + moves.get(i).space + " has score " + moves.get(i).score);
+	}
+	
     Move bestMove = moves.get(0);
     if(player == opPlayer){//max
       for(int i = 0; i < moves.size(); i++){
@@ -64,8 +68,7 @@ public class TicTacToeAI{
   
   private ArrayList<Integer> findSpots(char[] board){
     ArrayList<Integer> spaces = new ArrayList<Integer>();
-	for(int i = 0; i < board.length; i++){if((board[i] == ' ')spaces.add(i);}
-	System.out.println();
+	for(int i = 0; i < board.length; i++){if(board[i] == ' ')spaces.add(i);}
     return spaces;
   }
   
