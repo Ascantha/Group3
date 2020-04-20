@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+//Ver 3
+
 public class TicTacToeAI{
  char opPlayer;
  char enPlayer;
@@ -30,12 +32,13 @@ public class TicTacToeAI{
   }
   
   private Move minimax(char[] board, char player){
+	System.out.println("Playing for: " + player);
     if(winning(board, opPlayer)){return new Move(nullWin.space, nullWin.score);}
     else if(winning(board, enPlayer)){return new Move(nullLose.space, nullLose.score);}
     ArrayList<Integer> avail = findSpots(board);
     if(avail.size() == 0){return new Move(nullTie.space, nullTie.score);}
     
-    char oplayer = 'O';
+    oplayer = 'O';
     if(player == oplayer){oplayer = 'X';}
     
     ArrayList<Move> moves = new ArrayList<Move>();
@@ -55,12 +58,12 @@ public class TicTacToeAI{
     Move bestMove = moves.get(0);
     if(player == opPlayer){//max
       for(int i = 0; i < moves.size(); i++){
-        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
+        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
       }
     }
     else{//min
       for(int i = 0; i < moves.size(); i++){
-        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
+        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
       }
     }
     return bestMove;
