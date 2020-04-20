@@ -79,6 +79,21 @@ public class TicTacToeAI{
     }
   }
   
+  public int selectSpaceEasy(char[][] inBoard){
+	char[] board = new char[9];
+    for(int i = 0; i < 3; i++){
+      for(int j = 0; j < 3; j++){
+        board[i*3+j] = inBoard[i][j];
+      }
+    }
+	ArrayList<Integer> avail = findSpots(board);
+	int sel = (int)(Math.Random() * avail.size());
+	return avail.get(sel);
+  }
+  
+  
+  
+  
   private class Move{
     public int space;
     public int score;
