@@ -84,7 +84,7 @@ public class TicTacToeAI{
     }
   }
   
-  public int selectSpaceMedium(char[][] inBoard){
+  public int selectSpaceEasy(char[][] inBoard){
 	char[] board = new char[9];
     for(int i = 0; i < 3; i++){
       for(int j = 0; j < 3; j++){
@@ -96,7 +96,7 @@ public class TicTacToeAI{
 	return avail.get(sel);
   }
   
-  public int selectSpaceEasy(char[][] inBoard){
+  public int selectSpaceMedium(char[][] inBoard){
 	char[] board = new char[9];
     for(int i = 0; i < 3; i++){
       for(int j = 0; j < 3; j++){
