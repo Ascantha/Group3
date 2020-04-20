@@ -3,8 +3,8 @@ import java.util.ArrayList;
 public class TicTacToeAI{
  char opPlayer;
  char enPlayer;
- final Move nullWin = new Move(-1,10);
- final Move nullLose = new Move(-1,-10);
+ final Move nullWin = new Move(-1,-10);
+ final Move nullLose = new Move(-1,10);
  final Move nullTie = new Move(-1,0);
 
  public TicTacToeAI(){
