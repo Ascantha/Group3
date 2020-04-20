@@ -245,7 +245,7 @@ import javafx.application.Application;
 
 
   public class Cell extends Pane {
-
+   private TicTacToeAI ai = new TicTacToeAI();
    private char token = ' ';
 
    public Cell() {
@@ -255,14 +255,7 @@ import javafx.application.Application;
    }
 
    private void handleMouseClick() {
-    if (oppchoice == "Computer") {
-     //Nathan's AI 
-     //
-     //
-    }
-
-
-    if (oppchoice == "User") {
+    
      if (token == ' ' && whoseTurn != ' ') {
 
       setToken(whoseTurn); // Set token in the cell
@@ -278,16 +271,64 @@ import javafx.application.Application;
         lblStatus.setText(whoseTurn + " won the round. Play again");
         resetBoard();
         whoseTurn = 'X';
+		return;
        }
       } else if (isFull()) {
        lblStatus.setText("Draw! Redo");
        resetBoard();
+	   whoseTurn = 'X';
+	   return;
       } else {
        // Change the turn
        whoseTurn = (whoseTurn == 'X') ? 'O' : 'X'; // Display whose turn 
        lblStatus.setText(whoseTurn + "'s turn");
       }
-     }
+     
+	 if(oppchoice.equals("Computer") && whoseTurn != 'X'){
+		 //AI Stuff
+		 
+		 //Make board into char array
+		 char[][] n_board = new char[3][3];
+		 for(int i = 0; i < 3; i++){
+			 for(int j = 0; j < 3; j++){
+				 n_board[i][j] = cell[i][j].getToken();
+			 }
+		 }
+		 
+		 //Call selectSpace
+		 int r = ai.selectSpace(n_board);
+		 
+		 //turn retun into useable val
+		 int x = r % 3;
+		 int y = r / 3;
+		 
+		 //place piece
+		 cell[x][y].setToken(whoseTurn);
+		 
+		 //check conditions
+		 if (checkWinner()) {
+       if (XwinsCount == winsNeeded || OwinsCount == winsNeeded) {
+        lblStatus.setText(whoseTurn + " won! The game is over");
+        whoseTurn = ' '; // Game is over
+        return;
+       } else if (XwinsCount < winsNeeded && OwinsCount < winsNeeded) {
+        lblStatus.setText(whoseTurn + " won the round. Play again");
+        resetBoard();
+        whoseTurn = 'X';
+		return;
+       }
+      } else if (isFull()) {
+       lblStatus.setText("Draw! Redo");
+       resetBoard();
+	   whoseTurn = 'X';
+	   return;
+      } else {
+       // Change the turn
+       whoseTurn = (whoseTurn == 'X') ? 'O' : 'X'; // Display whose turn 
+       lblStatus.setText(whoseTurn + "'s turn");
+      }
+		 
+	 }
     }
    }
 

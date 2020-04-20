@@ -1,28 +1,26 @@
 import java.util.ArrayList;
 
 public class TicTacToeAI{
- GameState state;
  char opPlayer;
  char enPlayer;
  final Move nullWin = new Move(-1,10);
  final Move nullLose = new Move(-1,-10);
  final Move nullTie = new Move(-1,0);
 
- public TicTacToeAI(boolean isX, GameState s){
-   if(isX){opPlayer = 'X'; enPlayer = 'O';}
-   else{opPlayer = 'O'; enPlayer = 'X';}
-   state = s;
+ public TicTacToeAI(){
+	opPlayer = 'O';
+	enPlayer = 'X';
  }
    
-  public int selectSpace(){
+  public int selectSpace(char[][] inBoard){
     char[] board = new char[9];
     for(int i = 0; i < 3; i++){
       for(int j = 0; j < 3; j++){
-        board[i*3+j] = state.getBoard()[i][j];
+        board[i*3+j] = inBoard[i][j];
       }
     }
     Move bestMove = minimax(board, opPlayer);
-    return state.placePiece(bestMove.space % 3, bestMove.space / 3);
+    return bestMove.space();
   }
   
   private Move minimax(char[] board, char player){
