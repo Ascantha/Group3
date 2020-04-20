@@ -25,7 +25,7 @@ public class TicTacToeAI{
 		
     Move bestMove = minimax(board, opPlayer);
 	if (bestMove.space == -1){System.out.println("Error, returned null state");}
-	else{System.out.println("placed in space " + bestMove.space + " which had score " + bestMove.score);
+	else{System.out.println("placed in space " + bestMove.space + " which had score " + bestMove.score);}
     return bestMove.space;
   }
   
@@ -48,15 +48,15 @@ public class TicTacToeAI{
       board[avail.get(i)] = ' ';
     }
     
-    Move bestMove = new Move(-1,0);
+    Move bestMove = moves.get(0);
     if(player == opPlayer){//max
       for(int i = 0; i < moves.size(); i++){
-        if((moves.get(i).score >= bestMove.score) || (bestMove.space == -1)){bestMove = moves.get(i);}
+        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
       }
     }
     else{//min
       for(int i = 0; i < moves.size(); i++){
-        if((moves.get(i).score <= bestMove.score) || (bestMove.space == -1)){bestMove = moves.get(i);}
+        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
       }
     }
     return bestMove;
