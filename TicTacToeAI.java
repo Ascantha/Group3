@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-//Ver 666
+//Ver i don't wanna talk about how bad my variable names are
 
 public class TicTacToeAI{
  char opPlayer;
@@ -33,7 +33,7 @@ public class TicTacToeAI{
   
   private Move minimax(char[] board, char player){
     if(winning(board, opPlayer)){return new Move(nullWin.space, nullWin.score);}
-    else if(winning(board, enPlayer)){return new Move(nullLose.space, nullLose.score);}
+    if(winning(board, enPlayer)){return new Move(nullLose.space, nullLose.score);}
     ArrayList<Integer> avail = findSpots(board);
     if(avail.size() == 0){return new Move(nullTie.space, nullTie.score);}
     System.out.println("Playing for: " + player);
@@ -44,7 +44,7 @@ public class TicTacToeAI{
     
     for(int i = 0; i < avail.size(); i++){
       board[avail.get(i)] = player;
-      Move newMove = minimax(board, opPlayer);
+      Move newMove = minimax(board, oplayer);
       newMove.space = avail.get(i);
 	  if(newMove.score > 0){newMove.score -= 1;}
 	  if(newMove.score < 0){newMove.score += 1;}
@@ -64,7 +64,7 @@ public class TicTacToeAI{
     }
     else{//min
       for(int i = 0; i < moves.size(); i++){
-        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
+        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
       }
     }
     return bestMove;
