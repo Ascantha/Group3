@@ -36,7 +36,7 @@ public class TicTacToeAI{
     
     for(int i = 0; i < avail.size(); i++){
       board[avail.get(i)] = player;
-      Move newMove = minimax(board, player);
+      Move newMove = minimax(board, opPlayer);
       newMove.space = avail.get(i);
       moves.add(newMove);
       board[avail.get(i)] = '-';
@@ -45,7 +45,7 @@ public class TicTacToeAI{
     Move bestMove = new Move(-1,0);
     if(player == opPlayer){//max
       for(int i = 0; i < moves.size(); i++){
-        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
+        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
       }
     }
     else{//min
