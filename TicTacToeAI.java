@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-//Ver i don't wanna talk about how bad my variable names are
+//Ver fin
 
 public class TicTacToeAI{
  char opPlayer;
@@ -14,20 +14,15 @@ public class TicTacToeAI{
 	enPlayer = 'X';
  }
    
-  public int selectSpace(char[][] inBoard){
+  public int selectSpaceHard(char[][] inBoard){
     char[] board = new char[9];
     for(int i = 0; i < 3; i++){
       for(int j = 0; j < 3; j++){
         board[i*3+j] = inBoard[i][j];
       }
     }
-	System.out.print("Starting turn, board is: ");
-	for(int i = 0; i < board.length; i++){System.out.print("" + i + " " + board[i] + "-");}
-	System.out.println();
 		
     Move bestMove = minimax(board, opPlayer);
-	if (bestMove.space == -1){System.out.println("Error, returned null state");}
-	else{System.out.println("placed in space " + bestMove.space + " which had score " + bestMove.score);}
     return bestMove.space;
   }
   
@@ -36,7 +31,6 @@ public class TicTacToeAI{
     if(winning(board, enPlayer)){return new Move(nullLose.space, nullLose.score);}
     ArrayList<Integer> avail = findSpots(board);
     if(avail.size() == 0){return new Move(nullTie.space, nullTie.score);}
-    System.out.println("Playing for: " + player);
     char oplayer = 'O';
     if(player == oplayer){oplayer = 'X';}
     
@@ -52,9 +46,6 @@ public class TicTacToeAI{
       board[avail.get(i)] = ' ';
     }
     
-	for(int i = 0; i < moves.size(); i++){
-		System.out.println("Space " + moves.get(i).space + " has score " + moves.get(i).score);
-	}
 	
     Move bestMove = moves.get(0);
     if(player == opPlayer){//max
@@ -93,7 +84,7 @@ public class TicTacToeAI{
     }
   }
   
-  public int selectSpaceEasy(char[][] inBoard){
+  public int selectSpaceMedium(char[][] inBoard){
 	char[] board = new char[9];
     for(int i = 0; i < 3; i++){
       for(int j = 0; j < 3; j++){
@@ -103,6 +94,53 @@ public class TicTacToeAI{
 	ArrayList<Integer> avail = findSpots(board);
 	int sel = (int)(Math.random() * avail.size());
 	return avail.get(sel);
+  }
+  
+  public int selectSpaceEasy(char[][] inBoard){
+	char[] board = new char[9];
+    for(int i = 0; i < 3; i++){
+      for(int j = 0; j < 3; j++){
+        board[i*3+j] = inBoard[i][j];
+      }
+    }
+		
+    Move bestMove = maximax(board, opPlayer);
+    return bestMove.space;
+  }
+  
+  private Move maximax(char[] board, char player){
+    if(winning(board, opPlayer)){return new Move(nullWin.space, nullWin.score);}
+    if(winning(board, enPlayer)){return new Move(nullLose.space, nullLose.score);}
+    ArrayList<Integer> avail = findSpots(board);
+    if(avail.size() == 0){return new Move(nullTie.space, nullTie.score);}
+    char oplayer = 'O';
+    if(player == oplayer){oplayer = 'X';}
+    
+    ArrayList<Move> moves = new ArrayList<Move>();
+    
+    for(int i = 0; i < avail.size(); i++){
+      board[avail.get(i)] = player;
+      Move newMove = minimax(board, opPlayer);
+      newMove.space = avail.get(i);
+	  if(newMove.score > 0){newMove.score -= 1;}
+	  if(newMove.score < 0){newMove.score += 1;}
+      moves.add(newMove);
+      board[avail.get(i)] = ' ';
+    }
+    
+	
+    Move bestMove = moves.get(0);
+    if(player == opPlayer){//max
+      for(int i = 0; i < moves.size(); i++){
+        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
+      }
+    }
+    else{//min
+      for(int i = 0; i < moves.size(); i++){
+        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
+      }
+    }
+    return bestMove;
   }
   
   
