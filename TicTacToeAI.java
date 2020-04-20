@@ -87,7 +87,7 @@ public class TicTacToeAI{
       }
     }
 	ArrayList<Integer> avail = findSpots(board);
-	int sel = (int)(Math.Random() * avail.size());
+	int sel = (int)(Math.random() * avail.size());
 	return avail.get(sel);
   }
   
