@@ -27,6 +27,10 @@ import javafx.application.Application;
   public static String diffchoice = "";
   ToggleButton easybtn = new ToggleButton("Easy");
   ToggleButton hardbtn = new ToggleButton("Hard");
+  Scene menuscene;
+  
+
+
 
 
   public int sqFilled;
@@ -36,7 +40,6 @@ import javafx.application.Application;
   Label lblX = new Label();
   Label lblO = new Label();
   GridPane pane = new GridPane();
-  BorderPane borderPane = new BorderPane();
 
 
   // Create and initialize cell 
@@ -128,8 +131,9 @@ import javafx.application.Application;
 
    Alert a = new Alert(AlertType.WARNING);
    a.setContentText("Must Specify Amount of Wins Required");
-
-
+   
+  
+   
    //start button
    Button startbtn = new Button("Start");
    startbtn.setMaxHeight(200);
@@ -158,7 +162,7 @@ import javafx.application.Application;
    vbox.setAlignment(Pos.CENTER);
 
 
-   Scene menuscene = new Scene(vbox, 500, 500);
+    menuscene = new Scene(vbox, 500, 500);
 
    primaryStage.setTitle("TicTacToe");
    primaryStage.setScene(menuscene);
@@ -169,8 +173,33 @@ import javafx.application.Application;
   //function for printing out grid 
   public void grid(int wins, Stage primaryStage) {
 
+	  BorderPane borderPane = new BorderPane();
 
    Label lblScore = new Label("First to " + wins);
+   
+   
+   Button backbtn = new Button("Back");
+   backbtn.setMaxHeight(50);
+   backbtn.setMaxWidth(100);
+   
+   backbtn.setOnAction(e->{
+	   primaryStage.setScene(menuscene);
+	   BorderPane borderpane1 = new BorderPane();
+	   gridscene = new Scene(borderpane1);
+	   resetBoard();
+	   Xscore = 0;
+	   Oscore = 0;
+	   whoseTurn = 'X';
+	   XwinsCount = OwinsCount = 0;
+       lblStatus.setText(whoseTurn + "'s turn");
+
+   });
+   
+   HBox top_hbox = new HBox(20);
+   top_hbox.getChildren().addAll(lblScore,backbtn);
+   top_hbox.setAlignment(Pos.TOP_RIGHT);
+   top_hbox.setMargin(backbtn, new Insets(5,60,0,30));
+   
    Label lblXvO = new Label("X vs O");
 
    lblX.setText("" + Xscore);
@@ -187,7 +216,7 @@ import javafx.application.Application;
    hboxXO.setAlignment(Pos.CENTER);
 
    VBox vboxScore = new VBox();
-   vboxScore.getChildren().addAll(lblScore, lblXvO, hboxXO);
+   vboxScore.getChildren().addAll(top_hbox, lblXvO, hboxXO);
    vboxScore.setAlignment(Pos.CENTER);
 
    // Pane to hold cell hold nine cells 
@@ -196,7 +225,6 @@ import javafx.application.Application;
    for (int i = 0; i < 3; i++)
     for (int j = 0; j < 3; j++)
      pane.add(cell[i][j] = new Cell(), j, i);
-
 
    borderPane.setCenter(pane);
    borderPane.setBottom(lblStatus);
@@ -287,6 +315,7 @@ import javafx.application.Application;
    private TicTacToeAI ai = new TicTacToeAI();
    private char token = ' ';
 
+
    public Cell() {
     setStyle("-fx-border-color:black");
     this.setPrefSize(500, 800);
@@ -294,6 +323,9 @@ import javafx.application.Application;
    }
 
    private void handleMouseClick() {
+	   Alert game_alert = new Alert(AlertType.INFORMATION);
+	   game_alert.setContentText("Round Over! Please Select 'OK' to Continue");
+
     
      if (token == ' ' && whoseTurn != ' ') {
 
@@ -307,6 +339,7 @@ import javafx.application.Application;
         whoseTurn = ' '; // Game is over
         return;
        } else if (XwinsCount < winsNeeded && OwinsCount < winsNeeded) {
+   	   	game_alert.show();
         lblStatus.setText(whoseTurn + " won the round. Play again");
         resetBoard();
         whoseTurn = 'X';
@@ -335,7 +368,13 @@ import javafx.application.Application;
 		 }
 		 
 		 //Call selectSpace
-		 int r = ai.selectSpace(n_board);
+		 int r;
+		 if (diffchoice.equals("Hard")) {
+			 r = ai.selectSpace(n_board);
+		 }
+		 else {
+			 r = ai.selectSpaceEasy(n_board);
+		 }
 		 
 		 //turn retun into useable val
 		 int x = r % 3;
@@ -351,6 +390,7 @@ import javafx.application.Application;
         whoseTurn = ' '; // Game is over
         return;
        } else if (XwinsCount < winsNeeded && OwinsCount < winsNeeded) {
+    	   	game_alert.show();
         lblStatus.setText(whoseTurn + " won the round. Play again");
         resetBoard();
         whoseTurn = 'X';
@@ -377,9 +417,7 @@ import javafx.application.Application;
 
 
    public void setToken(char c) {
-    //		if (this.getToken() != ' ') {
-    //			return;
-    //		}
+ 
     token = c;
 
 
