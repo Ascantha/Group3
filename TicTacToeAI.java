@@ -20,6 +20,7 @@ public class TicTacToeAI{
       }
     }
     Move bestMove = minimax(board, opPlayer);
+	if (bestMove.space == -1){System.out.println("Error, returned null state");}
     return bestMove.space;
   }
   
@@ -39,7 +40,7 @@ public class TicTacToeAI{
       Move newMove = minimax(board, opPlayer);
       newMove.space = avail.get(i);
       moves.add(newMove);
-      board[avail.get(i)] = '-';
+      board[avail.get(i)] = ' ';
     }
     
     Move bestMove = new Move(-1,0);
@@ -58,7 +59,9 @@ public class TicTacToeAI{
   
   private ArrayList<Integer> findSpots(char[] board){
     ArrayList<Integer> spaces = new ArrayList<Integer>();
-    for(int i = 0; i < board.length; i++){if(!(board[i] == 'X' || board[i] == 'O'))spaces.add(i);}
+    for(int i = 0; i < board.length; i++){if((board[i] == ' ')spaces.add(i);}
+	for(int i = 0; i < spaces.size(); i++){System.out.print("" + Spaces.get(i) + " ");}
+	System.out.println();
     return spaces;
   }
   
