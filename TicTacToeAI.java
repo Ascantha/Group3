@@ -19,8 +19,13 @@ public class TicTacToeAI{
         board[i*3+j] = inBoard[i][j];
       }
     }
+	System.out.print("Starting turn, board is: ");
+	for(int i = 0; i < board.length; i++){System.out.print("" + board[i] + " ");}
+	System.out.println();
+		
     Move bestMove = minimax(board, opPlayer);
 	if (bestMove.space == -1){System.out.println("Error, returned null state");}
+	else{System.out.println("placed in space " + bestMove.space + " which had score " + bestMove.score);
     return bestMove.space;
   }
   
@@ -46,12 +51,12 @@ public class TicTacToeAI{
     Move bestMove = new Move(-1,0);
     if(player == opPlayer){//max
       for(int i = 0; i < moves.size(); i++){
-        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
+        if(moves.get(i).score >= bestMove.score || bestMove.space == -1){bestMove = moves.get(i);}
       }
     }
     else{//min
       for(int i = 0; i < moves.size(); i++){
-        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
+        if(moves.get(i).score <= bestMove.score || bestMove.space == -1){bestMove = moves.get(i);}
       }
     }
     return bestMove;
@@ -59,9 +64,6 @@ public class TicTacToeAI{
   
   private ArrayList<Integer> findSpots(char[] board){
     ArrayList<Integer> spaces = new ArrayList<Integer>();
-    for(int i = 0; i < board.length; i++){if((board[i] == ' ')spaces.add(i);}
-	for(int i = 0; i < spaces.size(); i++){System.out.print("" + Spaces.get(i) + " ");}
-	System.out.println();
     return spaces;
   }
   
