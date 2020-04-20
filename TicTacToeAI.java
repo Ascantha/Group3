@@ -20,7 +20,7 @@ public class TicTacToeAI{
       }
     }
 	System.out.print("Starting turn, board is: ");
-	for(int i = 0; i < board.length; i++){System.out.print("" + board[i] + "-");}
+	for(int i = 0; i < board.length; i++){System.out.print("" + i + " " + board[i] + "-");}
 	System.out.println();
 		
     Move bestMove = minimax(board, opPlayer);
@@ -30,10 +30,10 @@ public class TicTacToeAI{
   }
   
   private Move minimax(char[] board, char player){
-    if(winning(board, opPlayer)){return nullWin;}
-    else if(winning(board, enPlayer)){return nullLose;}
+    if(winning(board, opPlayer)){return new Move(nullWin.space, nullWin.score);}
+    else if(winning(board, enPlayer)){return new Move(nullLose.space, nullLose.score);}
     ArrayList<Integer> avail = findSpots(board);
-    if(avail.size() == 0){return nullTie;}
+    if(avail.size() == 0){return new Move(nullTie.space, nullTie.score);}
     
     char oplayer = 'O';
     if(player == oplayer){oplayer = 'X';}
