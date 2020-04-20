@@ -32,13 +32,12 @@ public class TicTacToeAI{
   }
   
   private Move minimax(char[] board, char player){
-	System.out.println("Playing for: " + player);
     if(winning(board, opPlayer)){return new Move(nullWin.space, nullWin.score);}
     else if(winning(board, enPlayer)){return new Move(nullLose.space, nullLose.score);}
     ArrayList<Integer> avail = findSpots(board);
     if(avail.size() == 0){return new Move(nullTie.space, nullTie.score);}
-    
-    oplayer = 'O';
+    System.out.println("Playing for: " + player);
+    char oplayer = 'O';
     if(player == oplayer){oplayer = 'X';}
     
     ArrayList<Move> moves = new ArrayList<Move>();
@@ -47,23 +46,25 @@ public class TicTacToeAI{
       board[avail.get(i)] = player;
       Move newMove = minimax(board, opPlayer);
       newMove.space = avail.get(i);
+	  if(newMove.score > 0){newMove.score -= 1;}
+	  if(newMove.score < 0){newMove.score += 1;}
       moves.add(newMove);
       board[avail.get(i)] = ' ';
     }
     
 	for(int i = 0; i < moves.size(); i++){
-		system.out.println("Space " + moves.get(i).space + " has score " + moves.get(i).score);
+		System.out.println("Space " + moves.get(i).space + " has score " + moves.get(i).score);
 	}
 	
     Move bestMove = moves.get(0);
     if(player == opPlayer){//max
       for(int i = 0; i < moves.size(); i++){
-        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
+        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
       }
     }
     else{//min
       for(int i = 0; i < moves.size(); i++){
-        if(moves.get(i).score >= bestMove.score){bestMove = moves.get(i);}
+        if(moves.get(i).score <= bestMove.score){bestMove = moves.get(i);}
       }
     }
     return bestMove;
