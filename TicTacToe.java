@@ -303,7 +303,7 @@ import javafx.application.Application;
 		 int y = r / 3;
 		 
 		 //place piece
-		 cell[x][y].setToken(whoseTurn);
+		 cell[y][x].setToken(whoseTurn);
 		 
 		 //check conditions
 		 if (checkWinner()) {

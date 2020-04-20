@@ -20,7 +20,7 @@ public class TicTacToeAI{
       }
     }
     Move bestMove = minimax(board, opPlayer);
-    return bestMove.space();
+    return bestMove.space;
   }
   
   private Move minimax(char[] board, char player){
