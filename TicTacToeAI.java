@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-//Ver 3
+//Ver 4
 
 public class TicTacToeAI{
  char opPlayer;
