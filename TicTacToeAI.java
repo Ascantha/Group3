@@ -64,6 +64,8 @@ public class TicTacToeAI{
   
   private ArrayList<Integer> findSpots(char[] board){
     ArrayList<Integer> spaces = new ArrayList<Integer>();
+	for(int i = 0; i < board.length; i++){if((board[i] == ' ')spaces.add(i);}
+	System.out.println();
     return spaces;
   }
   
