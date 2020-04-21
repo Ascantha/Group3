@@ -1,4 +1,6 @@
 
+import java.util.concurrent.TimeUnit;
+
 import javafx.application.Application;
  import javafx.stage.Stage;
  import javafx.event.ActionEvent;
@@ -26,13 +28,10 @@ import javafx.application.Application;
   public static String oppchoice = "";
   public static String diffchoice = "";
   ToggleButton easybtn = new ToggleButton("Easy");
+  ToggleButton mediumbtn = new ToggleButton("Medium");
   ToggleButton hardbtn = new ToggleButton("Hard");
   Scene menuscene;
   
-
-
-
-
   public int sqFilled;
   private char whoseTurn = 'X';
   int Xscore = 0;
@@ -69,6 +68,7 @@ import javafx.application.Application;
    computerbtn.setMinWidth(80);
    computerbtn.setOnAction(e->{
 	   easybtn.setDisable(false);
+	   mediumbtn.setDisable(false);
 	   hardbtn.setDisable(false);
    });
 
@@ -79,6 +79,7 @@ import javafx.application.Application;
    userbtn.setMinWidth(80);
    userbtn.setOnAction(e->{
 	   easybtn.setDisable(true);
+	   mediumbtn.setDisable(true);
 	   hardbtn.setDisable(true);
    });
 
@@ -89,7 +90,7 @@ import javafx.application.Application;
    opponent.setAlignment(Pos.TOP_CENTER);
    
    
-   Label lblDiff = new Label("Select Difficulty:");
+   Label lblDiff = new Label("Select Difficulty");
    
    ToggleGroup tdifgroup = new ToggleGroup();
 
@@ -98,6 +99,11 @@ import javafx.application.Application;
    easybtn.setMinWidth(80);
    easybtn.setSelected(true);
    
+   mediumbtn.setUserData("Medium");
+   mediumbtn.setToggleGroup(tdifgroup);
+   mediumbtn.setMinWidth(80);
+   
+   
    hardbtn.setUserData("Hard");
    hardbtn.setToggleGroup(tdifgroup);
    hardbtn.setMinWidth(80);
@@ -105,8 +111,7 @@ import javafx.application.Application;
    
    
    HBox diffbuttons = new HBox(20);
-   diffbuttons.getChildren().add(easybtn);
-   diffbuttons.getChildren().add(hardbtn);
+   diffbuttons.getChildren().addAll(easybtn,mediumbtn,hardbtn);
    diffbuttons.setAlignment(Pos.TOP_CENTER);
    
    VBox difficulty_vbox = new VBox(20);
@@ -321,11 +326,16 @@ import javafx.application.Application;
     this.setPrefSize(500, 800);
     this.setOnMouseClicked(e -> handleMouseClick());
    }
-
-   private void handleMouseClick() {
+   
+   public void alert() {
 	   Alert game_alert = new Alert(AlertType.INFORMATION);
 	   game_alert.setContentText("Round Over! Please Select 'OK' to Continue");
+ 	   game_alert.show();
+ 
+   }
 
+   private void handleMouseClick() {
+	  
     
      if (token == ' ' && whoseTurn != ' ') {
 
@@ -339,9 +349,10 @@ import javafx.application.Application;
         whoseTurn = ' '; // Game is over
         return;
        } else if (XwinsCount < winsNeeded && OwinsCount < winsNeeded) {
-   	   	game_alert.show();
+    	   alert();   	     
+    	   resetBoard();
         lblStatus.setText(whoseTurn + " won the round. Play again");
-        resetBoard();
+        
         whoseTurn = 'X';
 		return;
        }
@@ -370,7 +381,10 @@ import javafx.application.Application;
 		 //Call selectSpace
 		 int r;
 		 if (diffchoice.equals("Hard")) {
-			 r = ai.selectSpace(n_board);
+			 r = ai.selectSpaceHard(n_board);
+		 }
+		 else if (diffchoice.equals("Medium")) {
+			 r= ai.selectSpaceMedium(n_board);
 		 }
 		 else {
 			 r = ai.selectSpaceEasy(n_board);
@@ -389,14 +403,19 @@ import javafx.application.Application;
         lblStatus.setText(whoseTurn + " won! The game is over");
         whoseTurn = ' '; // Game is over
         return;
-       } else if (XwinsCount < winsNeeded && OwinsCount < winsNeeded) {
-    	   	game_alert.show();
-        lblStatus.setText(whoseTurn + " won the round. Play again");
+       } 
+       else if (XwinsCount < winsNeeded && OwinsCount < winsNeeded) {
+    	   
+    	   	//game_alert.show();
         resetBoard();
+      
+
+        lblStatus.setText(whoseTurn + " won the round. Play again...");
         whoseTurn = 'X';
 		return;
        }
       } else if (isFull()) {
+  	   //	game_alert.show();
        lblStatus.setText("Draw! Redo");
        resetBoard();
 	   whoseTurn = 'X';
